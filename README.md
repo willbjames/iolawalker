@@ -126,7 +126,6 @@ Adjust these values as needed before running.
    * Adjust sliders for sample/window thresholds, inference stride, hit window, required hits, and refractory period.
    * Observe real-time feedback and “ding” sounds as you walk.
 
-Happy footfall detecting! 🚶‍♂️🎶
 
 ```
 ```
