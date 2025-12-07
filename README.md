@@ -1,55 +1,24 @@
 ````markdown
-# Footfall Detection (LSTM) Pipeline
-
-This repository contains the `trainAndTest.py` script (in the `lstmFinal/` folder) which:
-
-1. **Trains** a Conv–LSTM model with dual (per-sample and per-window) heads.  
-2. **Exports** the best checkpoint to TorchScript (`.pt`) and writes scaler + threshold metadata (`.json`).  
-3. **Tests** on held-out data with a tolerance sweep, printing TP/FN/FP/Precision/Recall/F₁.
-
----
-
-## Prerequisites
-
-- **Python 3.8+**  
-- A modern GPU (optional, but recommended for training speed).  
-- The two CSV files:
-  - `train200hz.csv`
-  - `test200hz.csv`  
-  placed somewhere on disk; paths are configured in the script.
-
----
-
-## Setup
-
-1. **Clone the repo**  
-   ```bash
-   git clone https://github.com/your-username/your-repo.git
-   cd your-repo
-````
-
-2. **Create and activate a virtual environment**
-
-   ```bash
-   python3 -m venv venv
-   source venv/bin/activate    # (macOS/Linux)
-   # .\venv\Scripts\Activate.ps1  # (Windows PowerShell)
-   ```
-3. **Install dependencies**
-
-   ```bash
-   pip install --upgrade pip setuptools
-   pip install -r requirements.txt
-   ```
-4. **Place your CSV data**
-   Edit the top of `lstmFinal/trainAndTest.py` to point to your
-   `TRAIN_CSV` and `TEST_CSV` absolute paths.
-
----
-
 ## Usage
+Download into a folder and prompt your prompt-based codewriting agent to ingest and understand the repository. The repo is optimized for an LLM agent to understand and to begin improving the project with your own data!
 
-Run training, export, and testing in one go:
+To begin training on your own footfalls, collect your own footfall data from the android app, split it up into train and test, and put it into pythonModel/train200hz.csv and pythonModel/test200hz.csv.
+
+Refer to the paper on hugging face for more info
+https://huggingface.co/papers/2506.01211
+
+## To get your footfall data from your IMU
+
+1. **Open Android Studio**
+
+   * Launch Android Studio.
+   * Select **Open an existing project** and navigate to the `android-app/` (or `app/`) directory in this repo.
+   * Replace private const val TARGET_MAC_ADDRESS = "F3:CD:37:B7:4E:0B" in MainActivity.kt with the MAC Address of your Mbient labs IMU.
+   * Collect Footfall data from storage/emulated/0/Android/data/com.example.footfallng/files/sensor_data/
+
+```
+
+After splitting your data into train and test, train your LSTM using the training code.
 
 ```bash
 python lstmFinal/trainAndTest.py
@@ -70,11 +39,11 @@ The script will:
 
 ## Configuration
 
-All key constants live at the top of `trainAndTest.py`:
+All key constants live at the top of `lstmFinal/trainAndTest.py`:
 
 ```python
-TRAIN_CSV      = "/full/path/to/train200hz.csv"
-TEST_CSV       = "/full/path/to/test200hz.csv"
+TRAIN_CSV      = "pythonModel/train200hz.csv"
+TEST_CSV       = "pythonModel/test200hz.csv"
 SCALER_OUT     = "scaler_refined_v2.pkl"
 MODEL_OUT      = "best_refined_v2.pth"
 TS_MODEL_OUT   = "refined_v2_ts.pt"
@@ -90,8 +59,6 @@ SEED           = 42
 CLIP_NORM      = 5.0
 ```
 
-Adjust these values as needed before running.
-
 ---
 
 ## Results
@@ -103,30 +70,4 @@ Adjust these values as needed before running.
 
 ---
 
-## Running the Android App in Android Studio
-
-1. **Open Android Studio**
-
-   * Launch Android Studio (Arctic Fox or later).
-   * Select **Open an existing project** and navigate to the `android-app/` (or `app/`) directory in this repo.
-
-2. **Sync & Build**
-
-   * Allow Gradle to sync dependencies.
-   * The project uses the Android Gradle Plugin; ensure you have the Android SDK and the appropriate build tools installed.
-
-3. **Run on Device or Emulator**
-
-   * Connect a physical device via USB (enable Developer Options & USB debugging) or start an Android emulator.
-   * Click the **Run** ▶️ button, choose your target, and deploy the app.
-
-4. **Interactive Tuning**
-
-   * Once the app launches, navigate to the “Footfall Tuning” screen.
-   * Adjust sliders for sample/window thresholds, inference stride, hit window, required hits, and refractory period.
-   * Observe real-time feedback and “ding” sounds as you walk.
-
-
-```
-```
 
